@@ -1,0 +1,43 @@
+# Rust
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# Secrets — never commit
+secrets.toml
+
+# Frontend
+frontend/node_modules/
+frontend/.svelte-kit/
+frontend/build/
+
+# IDE
+node_modules
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Installer output
+installer/*.msi
+installer/*.wixobj
+installer/*.wixpdb
+
+# Plugins (runtime, not source)
+plugins/*.wasm
+
+# Postgres data (local dev)
+pgdata/
+
+# Logs
+*.log
+
+# Coverage / profiling
+lcov.info
+*.profraw

@@ -1,0 +1,19 @@
+[workspace]
+resolver = "2"
+members = [
+    "stack_trace_debug", # the proc-macro crate
+    ".",                 # the library that uses it
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+
+[package]
+name = "my-error"
+version.workspace = true
+edition.workspace = true
+
+
+[dependencies]
+stack_trace_debug = { path = "stack_trace_debug" }

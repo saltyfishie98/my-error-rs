@@ -1,0 +1,12 @@
+# Default: auto-detect and normalize to LF in repo
+* text=auto eol=lf
+
+# Force LF on files that break with CRLF
+.husky/* text eol=lf
+*.sh     text eol=lf
+
+# Binary files — no conversion
+*.wasm binary
+*.png  binary
+*.ico  binary
+*.msi  binary
