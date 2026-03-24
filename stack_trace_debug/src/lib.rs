@@ -79,7 +79,7 @@ pub fn stack_trace_debug(_attr: TokenStream, item: TokenStream) -> TokenStream {
                 // snafu::Location implements Display as "file:line:col"
                 let location_fmt = if has_location {
                     quote! {
-                        buf.push(format!("{}: {}\n     @ {}", layer, self, location));
+                        buf.push(format!("{}: {} @ {}", layer, self, location));
                     }
                 } else {
                     quote! {
@@ -190,7 +190,7 @@ pub fn stack_trace_debug(_attr: TokenStream, item: TokenStream) -> TokenStream {
                 use #crate_path::StackError;
                 let mut buf = Vec::new();
                 self.debug_fmt(0, &mut buf);
-                write!(f, "\n\n{}\n", buf.join("\n"))  // ← leading newline
+                write!(f, "\n{}\n", buf.join("\n"))  // ← leading newline
             }
         }
     };
