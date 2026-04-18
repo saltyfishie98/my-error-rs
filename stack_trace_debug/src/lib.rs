@@ -79,7 +79,7 @@ pub fn stack_trace_debug(_attr: TokenStream, item: TokenStream) -> TokenStream {
                 // snafu::Location implements Display as "file:line:col"
                 let location_fmt = if has_location {
                     quote! {
-                        buf.push(format!("{}: {} @ {}", layer, self, location));
+                        buf.push(format!("{}: {}\n   -> {}", layer, self, location));
                     }
                 } else {
                     quote! {
