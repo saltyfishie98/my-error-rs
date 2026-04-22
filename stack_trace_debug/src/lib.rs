@@ -189,7 +189,7 @@ pub fn stack_trace_debug(_attr: TokenStream, item: TokenStream) -> TokenStream {
             fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
                 use #crate_path::StackError;
                 let mut buf = Vec::new();
-                self.debug_fmt(0, &mut buf);
+                self.debug_fmt(1, &mut buf);
                 write!(f, "\n{}\n", buf.join("\n"))  // ← leading newline
             }
         }
