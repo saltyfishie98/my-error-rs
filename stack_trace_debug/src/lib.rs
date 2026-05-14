@@ -58,6 +58,7 @@ pub fn stack_trace_debug(_attr: TokenStream, item: TokenStream) -> TokenStream {
 
     let mut debug_fmt_arms = Vec::<TokenStream2>::new();
     let mut next_arms = Vec::<TokenStream2>::new();
+    let mut location_arms = Vec::<TokenStream2>::new();
 
     for variant in variants {
         let vname = &variant.ident;
@@ -118,6 +119,16 @@ pub fn stack_trace_debug(_attr: TokenStream, item: TokenStream) -> TokenStream {
                 next_arms.push(quote! {
                     #enum_name::#vname { #source_bind .. } => { #next_body }
                 });
+
+                let location_body = if has_location {
+                    quote! { Some(*location) }
+                } else {
+                    quote! { None }
+                };
+
+                location_arms.push(quote! {
+                    #enum_name::#vname { #location_bind .. } => { #location_body }
+                });
             }
 
             // ── Tuple variant — external leaf, no location ────────────────────
@@ -146,6 +157,9 @@ pub fn stack_trace_debug(_attr: TokenStream, item: TokenStream) -> TokenStream {
                 next_arms.push(quote! {
                     #enum_name::#vname(..) => { None }
                 });
+                location_arms.push(quote! {
+                    #enum_name::#vname(..) => { None }
+                });
             }
 
             // ── Unit variant ──────────────────────────────────────────────────
@@ -156,6 +170,9 @@ pub fn stack_trace_debug(_attr: TokenStream, item: TokenStream) -> TokenStream {
                     }
                 });
                 next_arms.push(quote! {
+                    #enum_name::#vname => { None }
+                });
+                location_arms.push(quote! {
                     #enum_name::#vname => { None }
                 });
             }
@@ -179,6 +196,12 @@ pub fn stack_trace_debug(_attr: TokenStream, item: TokenStream) -> TokenStream {
             fn next(&self) -> Option<&dyn #crate_path::StackError> {
                 match self {
                     #( #next_arms )*
+                }
+            }
+
+            fn location(&self) -> Option<::snafu::Location> {
+                match self {
+                    #( #location_arms )*
                 }
             }
         }

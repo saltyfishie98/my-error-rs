@@ -17,3 +17,4 @@ edition.workspace = true
 
 [dependencies]
 stack_trace_debug = { path = "stack_trace_debug" }
+snafu = { version = "0.9", default-features = false }

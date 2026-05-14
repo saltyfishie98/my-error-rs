@@ -19,6 +19,9 @@ pub trait StackError: std::error::Error {
     /// Walk to the next *internal* error in the chain (field named `source`).
     fn next(&self) -> Option<&dyn StackError>;
 
+    /// Location of this layer's error site, if it has one.
+    fn location(&self) -> Option<snafu::Location>;
+
     /// Walk to the deepest internal error.
     fn last(&self) -> &dyn StackError
     where
@@ -45,6 +48,23 @@ pub fn format_stack(err: &dyn StackError) -> String {
     let mut buf = Vec::new();
     err.debug_fmt(0, &mut buf);
     buf.join("\n")
+}
+
+/// Collect `(layer_index, Option<Location>)` for the full chain.
+pub fn locations(err: &dyn StackError) -> Vec<(usize, Option<snafu::Location>)> {
+    let mut out = Vec::new();
+    let mut cur: &dyn StackError = err;
+    let mut layer = 0;
+    loop {
+        out.push((layer, cur.location()));
+        match cur.next() {
+            Some(n) => {
+                cur = n;
+                layer += 1;
+            }
+            None => return out,
+        }
+    }
 }
 
 /// Terse user-facing format:  `KIND - REASON ([EXTERNAL CAUSE])`
